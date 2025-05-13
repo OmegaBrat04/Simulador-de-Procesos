@@ -86,7 +86,7 @@ public class Gestion {
 
         if (memOk) {
             proceso.setMemoriaAsignada(memoriaMB);
-            proceso.setPaginasAsignadas(paginasAsignadas); // << Debes agregar esto en PCB
+            proceso.setPaginasAsignadas(paginasAsignadas); 
         }
 
         if (cpuOk && memOk) {
