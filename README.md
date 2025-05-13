@@ -4,8 +4,6 @@ Simulador basico de un gestor de procesos que implementa los conceptos fundament
 
 ## Informacion del Curso 
 
-The workspace contains two folders by default, where:
-
 - `Materia`: Sistemas Operativos 
 - `Institucion`: Universidad Autonoma de Tamaulipas. Facultad de Ingenieria "Arturo Narro Siller"
 - `Semestre`: Sexto Semestre de 2025
