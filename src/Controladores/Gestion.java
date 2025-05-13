@@ -1,5 +1,7 @@
 package Controladores;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -79,9 +81,13 @@ public class Gestion {
                 proceso.setCpuAsignada(true);
         }
 
-        boolean memOk = recursos.solicitarMemoria(String.valueOf(pid), memoriaMB);
-        if (memOk)
+        List<Integer> paginasAsignadas = recursos.solicitarMemoria(String.valueOf(pid), memoriaMB);
+        boolean memOk = paginasAsignadas != null;
+
+        if (memOk) {
             proceso.setMemoriaAsignada(memoriaMB);
+            proceso.setPaginasAsignadas(paginasAsignadas); // << Debes agregar esto en PCB
+        }
 
         if (cpuOk && memOk) {
             System.out.println("Recursos asignados al proceso " + pid);
@@ -94,9 +100,11 @@ public class Gestion {
             proceso.setCpuAsignada(false);
         }
         if (memOk) {
-            recursos.liberarMemoria(memoriaMB);
+            recursos.liberarPaginas(paginasAsignadas);
             proceso.setMemoriaAsignada(0);
+            proceso.setPaginasAsignadas(null);
         }
+
         return false;
     }
 
@@ -110,10 +118,12 @@ public class Gestion {
             proceso.setCpuAsignada(false);
         }
 
-        if (proceso.getMemoriaAsignada() > 0) {
-            recursos.liberarMemoria(proceso.getMemoriaAsignada());
+        if (proceso.getMemoriaAsignada() > 0 && proceso.getPaginasAsignadas() != null) {
+            recursos.liberarPaginas(proceso.getPaginasAsignadas());
             proceso.setMemoriaAsignada(0);
+            proceso.setPaginasAsignadas(null);
         }
+
     }
 
     // Metodo para terminar un proceso
@@ -142,9 +152,20 @@ public class Gestion {
 
     // Obtenemos todos los procesos
     public void listarProcesos() {
-        for (PCB pcb : procesos.values()) {
-            System.out.println(pcb);
-        }
+        System.out.println("=== Procesos LISTOS ===");
+        procesos.values().stream()
+                .filter(p -> p.getEstado() == PCB.Estado.LISTO)
+                .forEach(System.out::println);
+
+        System.out.println("\n=== Procesos EN ESPERA ===");
+        procesos.values().stream()
+                .filter(p -> p.getEstado() == PCB.Estado.ESPERANDO)
+                .forEach(System.out::println);
+
+        System.out.println("\n=== Proceso EN EJECUCIÓN ===");
+        procesos.values().stream()
+                .filter(p -> p.getEstado() == PCB.Estado.EJECUTANDO)
+                .forEach(System.out::println);
     }
 
     public Set<Integer> getPIDs() {
@@ -157,6 +178,28 @@ public class Gestion {
 
     public PCB obtenerProceso(int pid) {
         return procesos.get(pid);
+    }
+
+    public void avanzarSimulacion() {
+        planificar();
+        mostrarEstadoSistema();
+    }
+
+    public void mostrarEstadoSistema() {
+        listarProcesos(); 
+        System.out.println("\n=== Procesos TERMINADOS ===");
+        procesos.values().stream()
+                .filter(p -> p.getEstado() == PCB.Estado.TERMINADO)
+                .forEach(System.out::println);
+
+        System.out.println("\n=== Estado del Procesador ===");
+        boolean ocupado = procesos.values().stream().anyMatch(p -> p.getEstado() == PCB.Estado.EJECUTANDO);
+        System.out.println(ocupado ? "En uso" : "Libre");
+
+        System.out.println("\n=== Memoria Disponible ===");
+        System.out.println(recursos.getMemoriaDisponible() + " MB");
+
+        recursos.mostrarMarcosUsados(); 
     }
 
 }

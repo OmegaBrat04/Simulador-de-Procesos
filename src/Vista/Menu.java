@@ -23,15 +23,16 @@ public class Menu {
             System.out.println("Simulador de Gestión de Procesos - Línea de Comandos");
             System.out.println("Comandos disponibles:");
             System.out.println("  crear <prioridad>                - Crea un proceso con la prioridad dada");
+            System.out.println("  solicitar <pid> <si/no> <memMB>  - Solicita recursos para el proceso");
             System.out.println("  suspender <pid>                  - Suspende el proceso con el ID dado");
             System.out.println("  reanudar <pid>                   - Reanuda el proceso con el ID dado");
-            System.out.println("  terminar <pid>                   - Termina el proceso con el ID dado");
-            System.out.println("  forzar <pid> <causa>             - Termina el proceso con el ID dado forzadamente");
-            System.out.println("  solicitar <pid> <si/no> <memMB>  - Solicita recursos para el proceso");
-            System.out.println("  listar                           - Lista todos los procesos");
-            System.out.println("  planificar                       - Ejecuta el planificador");
             System.out.println("  producir <pid> <valor>           - Produce un valor en el buffer");
             System.out.println("  consumir <pid>                   - Consume un valor del buffer");
+            System.out.println("  terminar <pid>                   - Termina el proceso con el ID dado");
+            System.out.println("  forzar <pid> <causa>             - Termina el proceso con el ID dado forzadamente");
+            System.out.println("  listar                           - Lista todos los procesos");
+            System.out.println("  planificar                       - Ejecuta el planificador");
+            System.out.println("  avanzar                          - Avance paso a paso");
             System.out.println("  salir                            - Finaliza el simulador");
             System.out.println();
             System.out.print("> ");
@@ -196,6 +197,9 @@ public class Menu {
                     } catch (NumberFormatException e) {
                         System.out.println("PID inválido.");
                     }
+                    break;
+                case "avanzar":
+                    gestor.avanzarSimulacion();
                     break;
 
                 case "salir":

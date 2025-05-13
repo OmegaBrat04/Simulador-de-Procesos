@@ -1,7 +1,7 @@
 package Modelo;
 
-
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class PCB {
     private String causaTerminacion;
@@ -63,12 +63,22 @@ public class PCB {
     }
 
     public String getCausaTerminacion() {
-    return causaTerminacion;
-}
+        return causaTerminacion;
+    }
 
-public void setCausaTerminacion(String causa) {
-    this.causaTerminacion = causa;
-}
+    public void setCausaTerminacion(String causa) {
+        this.causaTerminacion = causa;
+    }
+
+    private List<Integer> paginasAsignadas = new ArrayList<>();
+
+    public List<Integer> getPaginasAsignadas() {
+        return paginasAsignadas;
+    }
+
+    public void setPaginasAsignadas(List<Integer> paginas) {
+        this.paginasAsignadas = paginas;
+    }
 
     @Override
     public String toString() {
@@ -78,6 +88,7 @@ public void setCausaTerminacion(String causa) {
                 ", Prioridad=" + prioridad +
                 ", CPU=" + (cpuAsignada ? "Asignada" : "Libre") +
                 ", Memoria=" + memoriaAsignada + "MB" +
+                ", Marcos/Páginas=" + (paginasAsignadas != null ? paginasAsignadas.toString() : "[]") +
                 ", CausaTerminación=" + (causaTerminacion != null ? causaTerminacion : "N/A") +
                 '}';
     }
